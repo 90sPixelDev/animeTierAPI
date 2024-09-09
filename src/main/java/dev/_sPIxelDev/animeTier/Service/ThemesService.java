@@ -10,9 +10,4 @@ public class ThemesService {
 
     @Autowired
     private ThemesRepo themesRepo;
-
-    public Themes addTheme(Themes theme) {
-
-        return themesRepo.save(theme);
-    }
 }

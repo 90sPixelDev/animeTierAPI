@@ -11,7 +11,7 @@ public class Anime {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-//    @Column(nullable = false)
+    @Column(nullable = false)
     private int id;
 
     @Column

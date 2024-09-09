@@ -10,15 +10,17 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class ThemesController {
+    private ThemesRepo themesRepo;
 
     @Autowired
-    private ThemesRepo themesRepo;
-    @Autowired
-    private ThemesService themesService;
+    public void setThemesRepo(ThemesRepo themesRepo) {
+        this.themesRepo = themesRepo;
+    };
 
     @PostMapping("/addtheme")
     public String addTheme(@RequestBody Themes theme) {
-        themesService.addTheme(theme);
+
+        themesRepo.save(theme);
 
         return "Added theme succesfully!";
     }

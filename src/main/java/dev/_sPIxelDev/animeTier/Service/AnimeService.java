@@ -11,8 +11,4 @@ public class AnimeService {
     @Autowired
     private AnimeRepo animeRepo;
 
-    public Anime addAnime(Anime anime) {
-
-        return animeRepo.save(anime);
-    }
 }

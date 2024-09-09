@@ -9,7 +9,7 @@ public class Themes {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-//    @Column(nullable = false)
+    @Column(name = "id", nullable = false)
     private int themeId;
 
     @Column
@@ -32,7 +32,7 @@ public class Themes {
         this.themeId = themeId;
     };
 
-    public Themes(int id, String theme_title, Anime anime_id, char rating, Boolean is_opening) {
+    public Themes(int themeId, String theme_title, Anime anime_id, char rating, Boolean is_opening) {
         this.themeId = themeId;
         this.theme_title = theme_title;
         this.anime_id = anime_id;
