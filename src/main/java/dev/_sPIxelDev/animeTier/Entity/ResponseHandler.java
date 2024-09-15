@@ -14,7 +14,7 @@ public class ResponseHandler {
         try {
             map.put("timestamp", new Date());
             map.put("status", status.value());
-            map.put("isSuccess", error);
+            map.put("isError", error);
             map.put("message", message);
             map.put("data", responseObj);
 
@@ -23,7 +23,7 @@ public class ResponseHandler {
             map.clear();
             map.put("timestamp", new Date());
             map.put("status", HttpStatus.INTERNAL_SERVER_ERROR.value());
-            map.put("isSuccess",false);
+            map.put("isError",false);
             map.put("message", e.getMessage());
             map.put("data", null);
             return new ResponseEntity<Object>(map,status);
