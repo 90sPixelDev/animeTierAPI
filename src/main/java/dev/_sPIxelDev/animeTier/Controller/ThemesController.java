@@ -2,7 +2,6 @@ package dev._sPIxelDev.animeTier.Controller;
 
 import dev._sPIxelDev.animeTier.Entity.Themes;
 import dev._sPIxelDev.animeTier.Repository.ThemesRepo;
-import dev._sPIxelDev.animeTier.Service.ThemesService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;

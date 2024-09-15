@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -22,12 +21,12 @@ public class AnimeController {
     @Autowired
     public void setAnimeRepo(AnimeRepo animeRepo) {
         this.animeRepo = animeRepo;
-    };
+    }
 
     @GetMapping("/animeTT")
     public List<Anime> getAnimeTT () {
         return animeRepo.getAllAnimeTitlesWithThemeTitles();
-    };
+    }
 
 
     @GetMapping("/anime")
@@ -35,7 +34,7 @@ public class AnimeController {
         Page<Anime> animePage = animeRepo.findAll(PageRequest.of(pageNumber, 21, Sort.Direction.ASC, "id"));
 
         return animePage.getContent();
-    };
+    }
 
     @GetMapping("/anime/{anime_id}")
     public ResponseEntity<Object> getAnimeById(@PathVariable int anime_id) {
@@ -46,7 +45,7 @@ public class AnimeController {
         } catch(Exception e) {
             return ResponseHandler.generateResponse(HttpStatus.NOT_FOUND, false, e.getMessage(), null);
         }
-    };
+    }
 
     @GetMapping("/anime/{anime_id}/title")
     public ResponseEntity<Object> getAnimeTitle(@PathVariable int anime_id) {
@@ -58,41 +57,42 @@ public class AnimeController {
         catch (Exception e){
             return ResponseHandler.generateResponse(HttpStatus.NOT_FOUND, false, e.getMessage(), null);
         }
-    };
+    }
 
 
     // TAKES RAW TEXT AS PARAM
     @PutMapping("/anime/update/{anime_id}")
     @ResponseBody
-    public String updateAnime(@PathVariable int anime_id,@RequestBody String anime_title) {
+    public ResponseEntity<Object> updateAnimeTitle(@PathVariable int anime_id,@RequestBody String anime_title) {
 //        HttpHeaders headers = new HttpHeaders();
 
-        Anime anime = animeRepo.findById(anime_id).get();
 
-        if (!anime_title.matches(".*\\w.*")) return "Invalid Anime Title.";
+        if (!anime_title.matches(".*\\w.*"))
+            return ResponseHandler.generateResponse(HttpStatus.BAD_REQUEST, true, "Invalid anime title", null);
+
 
         try {
+            Anime anime = animeRepo.findById(anime_id).get();
             anime.setTitle(anime_title);
             animeRepo.save(anime);
             System.out.println("New Anime Title:" + anime_title);
-            return "Successful Anime Title Update!";
+            return ResponseHandler.generateResponse(HttpStatus.OK, false, "Sucessfully updated anime in database", anime);
         } catch (Exception e ) {
-            return e.getMessage();
+            return ResponseHandler.generateResponse(HttpStatus.BAD_REQUEST, true, e.getMessage(), null);
         }
     }
 
 
     @PostMapping("/anime/add")
-    public ResponseEntity<String> addAnime(@RequestBody(required = true) Anime anime) {
+    public ResponseEntity<Object> addAnime(@RequestBody(required = true) Anime anime) {
 
-        HttpHeaders headers = new HttpHeaders();
-
-        if (animeRepo.save(anime) != null) {
-            headers.add("anime", anime.toString());
-            return new ResponseEntity<>(headers, HttpStatus.CREATED);
+        try  {
+            animeRepo.save(anime);
+            return ResponseHandler.generateResponse(HttpStatus.OK, false, "Sucessfully added anime to database", anime);
         }
-        else
-            return new ResponseEntity<>("Failure", HttpStatus.BAD_REQUEST);
+        catch (Exception e) {
+            return ResponseHandler.generateResponse(HttpStatus.BAD_REQUEST, true, e.getMessage(), null);
+        }
 
     }
 

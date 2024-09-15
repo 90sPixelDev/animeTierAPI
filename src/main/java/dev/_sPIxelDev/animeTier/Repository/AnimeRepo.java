@@ -11,5 +11,5 @@ import java.util.List;
 public interface AnimeRepo extends JpaRepository<Anime, Integer> {
 
     @Query(nativeQuery = true, value = "SELECT anime_title, theme_title FROM anime, themes WHERE anime.id = themes.anime_id")
-    public List<Anime> getAllAnimeTitlesWithThemeTitles();
+    List<Anime> getAllAnimeTitlesWithThemeTitles();
 }
