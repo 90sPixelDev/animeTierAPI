@@ -30,10 +30,15 @@ public class AnimeController {
 
 
     @GetMapping("/anime")
-    public List<Anime> getAllAnime(@RequestParam(defaultValue = "1") int pageNumber) {
-        Page<Anime> animePage = animeRepo.findAll(PageRequest.of(pageNumber, 21, Sort.Direction.ASC, "id"));
+    public ResponseEntity<Object> getAllAnime(@RequestParam(defaultValue = "0") int pageNumber) {
+        try {
+            Page<Anime> animePage = animeRepo.findAll(PageRequest.of(pageNumber, 20, Sort.Direction.ASC, "id"));
+            return ResponseHandler.generateResponse(HttpStatus.OK, true, "Anime info fetched successfully!", animePage.getContent());
 
-        return animePage.getContent();
+        }
+        catch (Exception e) {
+            return ResponseHandler.generateResponse(HttpStatus.NOT_FOUND, false, e.getMessage(), null);
+        }
     }
 
     @GetMapping("/anime/{anime_id}")
@@ -76,7 +81,7 @@ public class AnimeController {
             anime.setTitle(anime_title);
             animeRepo.save(anime);
             System.out.println("New Anime Title:" + anime_title);
-            return ResponseHandler.generateResponse(HttpStatus.OK, false, "Sucessfully updated anime in database", anime);
+            return ResponseHandler.generateResponse(HttpStatus.OK, false, "Successfully updated anime in database", anime);
         } catch (Exception e ) {
             return ResponseHandler.generateResponse(HttpStatus.BAD_REQUEST, true, e.getMessage(), null);
         }
@@ -88,7 +93,7 @@ public class AnimeController {
 
         try  {
             animeRepo.save(anime);
-            return ResponseHandler.generateResponse(HttpStatus.OK, false, "Sucessfully added anime to database", anime);
+            return ResponseHandler.generateResponse(HttpStatus.OK, false, "Successfully added anime to database", anime);
         }
         catch (Exception e) {
             return ResponseHandler.generateResponse(HttpStatus.BAD_REQUEST, true, e.getMessage(), null);
@@ -102,7 +107,7 @@ public class AnimeController {
         try {
             Anime anime = animeRepo.findAll().get(anime_id);
             animeRepo.delete(anime);
-            return ResponseHandler.generateResponse(HttpStatus.OK, false, "Sucessfully deleted anime from database", anime);
+            return ResponseHandler.generateResponse(HttpStatus.OK, false, "Successfully deleted anime from database", anime);
         } catch (Exception e){
             return ResponseHandler.generateResponse(HttpStatus.NOT_FOUND, true, e.getMessage(), null);
 
